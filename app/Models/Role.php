@@ -11,7 +11,24 @@ class Role extends Model
     const ADMIN       = 'admin';
     const SUB_ADMIN   = 'sub_admin';
 
+    // Higher value = higher rank
+    const HIERARCHY = [
+        self::SUPER_ADMIN => 3,
+        self::ADMIN       => 2,
+        self::SUB_ADMIN   => 1,
+    ];
+
     protected $fillable = ['name', 'display_name', 'description'];
+
+    public function rank(): int
+    {
+        return self::HIERARCHY[$this->name] ?? 0;
+    }
+
+    public function isHigherThan(Role $other): bool
+    {
+        return $this->rank() > $other->rank();
+    }
 
     public function permissions(): BelongsToMany
     {
