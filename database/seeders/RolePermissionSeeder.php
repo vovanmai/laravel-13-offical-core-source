@@ -25,13 +25,13 @@ class RolePermissionSeeder extends Seeder
             Permission::firstOrCreate(['name' => $perm['name']], $perm);
         }
 
-        $superAdmin = Role::firstOrCreate(['name' => 'super_admin'], [
+        $superAdmin = Role::firstOrCreate(['name' => Role::SUPER_ADMIN], [
             'display_name' => 'Super Admin',
             'description'  => 'Toàn quyền hệ thống',
         ]);
         $superAdmin->permissions()->sync(Permission::pluck('id'));
 
-        $admin = Role::firstOrCreate(['name' => 'admin'], [
+        $admin = Role::firstOrCreate(['name' => Role::ADMIN], [
             'display_name' => 'Admin',
             'description'  => 'Quản trị người dùng và vai trò',
         ]);
@@ -39,7 +39,7 @@ class RolePermissionSeeder extends Seeder
             Permission::whereIn('name', ['user.view', 'user.create', 'user.edit', 'role.view'])->pluck('id')
         );
 
-        $subAdmin = Role::firstOrCreate(['name' => 'sub_admin'], [
+        $subAdmin = Role::firstOrCreate(['name' => Role::SUB_ADMIN], [
             'display_name' => 'Sub Admin',
             'description'  => 'Quyền hạn chế',
         ]);

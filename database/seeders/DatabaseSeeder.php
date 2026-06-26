@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -17,7 +18,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(RolePermissionSeeder::class);
 
-        $adminRole = \App\Models\Role::where('name', 'super_admin')->first();
+        $adminRole = Role::where('name', Role::SUPER_ADMIN)->first();
 
         User::factory()->create([
             'name'    => 'Test User',

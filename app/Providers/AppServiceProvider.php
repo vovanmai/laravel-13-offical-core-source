@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Permission;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
@@ -21,9 +22,8 @@ class AppServiceProvider extends ServiceProvider
 
     private function registerGates(): void
     {
-        // super_admin bypasses all gates
         Gate::before(function (User $user, string $ability) {
-            if ($user->hasRole('super_admin')) {
+            if ($user->hasRole(Role::SUPER_ADMIN)) {
                 return true;
             }
         });
