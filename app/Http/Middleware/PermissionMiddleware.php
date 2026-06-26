@@ -25,6 +25,6 @@ class PermissionMiddleware
             }
         }
 
-        abort(403, 'Unauthorized.');
+        abort(403, 'Không có quyền thực hiện tác vụ này.');
     }
 }
