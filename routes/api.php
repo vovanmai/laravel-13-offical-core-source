@@ -18,4 +18,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('permission:user.view')->group(function () {
         Route::get('users', [UserController::class, 'index']);
     });
+    Route::middleware('permission:user.create')->group(function () {
+        Route::post('users', [UserController::class, 'store']);
+    });
+    Route::middleware('permission:user.edit')->group(function () {
+        Route::put('users/{user}', [UserController::class, 'update']);
+    });
+    Route::middleware('permission:user.delete')->group(function () {
+        Route::delete('users/{user}', [UserController::class, 'destroy']);
+    });
 });
