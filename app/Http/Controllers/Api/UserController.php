@@ -5,10 +5,11 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
-use App\Models\User;
+
 use App\Services\User\CreateService;
 use App\Services\User\DeleteService;
 use App\Services\User\ListService;
+use App\Services\User\ShowService;
 use App\Services\User\UpdateService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -17,6 +18,7 @@ class UserController extends Controller
 {
     public function __construct(
         private readonly ListService   $listService,
+        private readonly ShowService   $showService,
         private readonly CreateService $createService,
         private readonly UpdateService $updateService,
         private readonly DeleteService $deleteService,
@@ -29,6 +31,11 @@ class UserController extends Controller
         );
     }
 
+    public function show(int $id): JsonResponse
+    {
+        return response()->json($this->showService->execute($id));
+    }
+
     public function store(StoreUserRequest $request): JsonResponse
     {
         return response()->json(
@@ -37,16 +44,16 @@ class UserController extends Controller
         );
     }
 
-    public function update(UpdateUserRequest $request, User $user): JsonResponse
+    public function update(UpdateUserRequest $request, int $id): JsonResponse
     {
         return response()->json(
-            $this->updateService->execute($user, $request->validated())
+            $this->updateService->execute($id, $request->validated())
         );
     }
 
-    public function destroy(User $user): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
-        $this->deleteService->execute($user);
+        $this->deleteService->execute($id);
 
         return response()->json(['message' => 'Xóa user thành công.']);
     }

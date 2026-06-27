@@ -14,6 +14,7 @@ class ListService
         $actor = Auth::user();
         $actorRank = $actor?->role?->rank() ?? 0;
         $canDelete = $actor?->hasPermission(\App\Models\Permission::USER_DELETE) ?? false;
+        $canEdit = $actor?->hasPermission(\App\Models\Permission::USER_EDIT) ?? false;
 
         $users = User::with('role')
             ->whereHas('role', fn($q) => $q->where('name', '!=', Role::SUPER_ADMIN))
@@ -34,7 +35,7 @@ class ListService
                 'email'      => $user->email,
                 'role'       => $user->role?->display_name,
                 'can_delete' => $canDelete && $actorRank > ($user->role?->rank() ?? 0),
-                'can_edit' => $canDelete && $actorRank > ($user->role?->rank() ?? 0),
+                'can_edit' => $canEdit && $actorRank > ($user->role?->rank() ?? 0),
             ]),
             'meta' => [
                 'current_page' => $users->currentPage(),

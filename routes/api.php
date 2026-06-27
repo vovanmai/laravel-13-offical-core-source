@@ -14,16 +14,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('roles', [RoleController::class, 'index']);
 
-    Route::middleware('permission:' . Permission::USER_VIEW)->group(function () {
-        Route::get('users', [UserController::class, 'index']);
-    });
-    Route::middleware('permission:' . Permission::USER_CREATE)->group(function () {
-        Route::post('users', [UserController::class, 'store']);
-    });
-    Route::middleware('permission:' . Permission::USER_EDIT)->group(function () {
-        Route::put('users/{user}', [UserController::class, 'update']);
-    });
-    Route::middleware('permission:' . Permission::USER_DELETE)->group(function () {
-        Route::delete('users/{user}', [UserController::class, 'destroy']);
-    });
+    # user
+    Route::get('users', [UserController::class, 'index'])->middleware('permission:' . Permission::USER_VIEW);
+    Route::get('users/{id}', [UserController::class, 'show'])->middleware('permission:' . Permission::USER_VIEW);
+    Route::post('users', [UserController::class, 'store'])->middleware('permission:' . Permission::USER_CREATE);
+    Route::put('users/{id}', [UserController::class, 'update'])->middleware('permission:' . Permission::USER_EDIT);
+    Route::delete('users/{id}', [UserController::class, 'destroy'])->middleware('permission:' . Permission::USER_DELETE);
 });

@@ -7,10 +7,10 @@ use Illuminate\Support\Facades\Auth;
 
 class DeleteService
 {
-    public function execute(User $user): void
+    public function execute(int $id): void
     {
         $actor = User::with('role')->findOrFail(Auth::id());
-        $target = $user->loadMissing('role');
+        $target = User::with('role')->findOrFail($id);
 
         abort_if($actor->id === $target->id, 422, 'Không thể xóa chính mình.');
 
@@ -20,6 +20,6 @@ class DeleteService
             'Không đủ quyền xóa user có cấp bậc cao hơn hoặc ngang bằng.'
         );
 
-        $user->delete();
+        $target->delete();
     }
 }
