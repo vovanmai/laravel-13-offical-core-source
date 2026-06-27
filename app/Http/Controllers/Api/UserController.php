@@ -25,7 +25,7 @@ class UserController extends Controller
     public function index(Request $request): JsonResponse
     {
         return response()->json(
-            $this->listService->execute($request->only('search', 'role_id', 'per_page'))
+            $this->listService->execute($request->only('email', 'role_id', 'per_page'))
         );
     }
 

@@ -12,9 +12,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
 
-    Route::middleware('permission:' . Permission::ROLE_VIEW)->group(function () {
-        Route::get('roles', [RoleController::class, 'index']);
-    });
+    Route::get('roles', [RoleController::class, 'index']);
 
     Route::middleware('permission:' . Permission::USER_VIEW)->group(function () {
         Route::get('users', [UserController::class, 'index']);

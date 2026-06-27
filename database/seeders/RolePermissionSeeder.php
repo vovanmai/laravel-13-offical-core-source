@@ -42,7 +42,7 @@ class RolePermissionSeeder extends Seeder
             'description'  => 'Quyền hạn chế',
         ]);
         $subAdmin->permissions()->sync(
-            Permission::whereIn('name', [Permission::USER_VIEW, Permission::ROLE_VIEW])->pluck('id')
+            Permission::whereIn('name', [Permission::USER_VIEW, Permission::USER_CREATE, Permission::ROLE_VIEW])->pluck('id')
         );
     }
 }

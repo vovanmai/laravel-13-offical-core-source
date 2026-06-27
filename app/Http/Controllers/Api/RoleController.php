@@ -3,24 +3,18 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Role;
+use App\Services\Role\ListService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {
-    public function index(): JsonResponse
-    {
-        $roles = Role::with('permissions')
-            ->where('name', '!=', Role::SUPER_ADMIN)
-            ->get()
-            ->map(fn(Role $role) => [
-                'id'           => $role->id,
-                'name'         => $role->name,
-                'display_name' => $role->display_name,
-                'description'  => $role->description,
-                'permissions'  => $role->permissions->pluck('name'),
-            ]);
+    public function __construct(
+        private readonly ListService $listService,
+    ) {}
 
-        return response()->json($roles);
+    public function index(Request $request): JsonResponse
+    {
+        return response()->json($this->listService->execute($request->only('less_than')));
     }
 }
