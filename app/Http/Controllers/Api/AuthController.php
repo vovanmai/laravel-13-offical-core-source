@@ -19,8 +19,8 @@ class AuthController extends Controller
 
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json([
-                'message' => 'Email hoặc mật khẩu không đúng.',
-            ], 401);
+                'message' => 'Email hoặc mật khẩu không đúng. Vui lòng liên hệ Admin để cấp lại tài khoản.',
+            ], 403);
         }
 
         $token = $user->createToken('api-token')->plainTextToken;
