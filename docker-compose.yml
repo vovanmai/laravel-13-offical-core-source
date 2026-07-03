@@ -74,6 +74,24 @@ services:
       - db
       - redis
 
+  reverb:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    container_name: laravel_reverb
+    restart: unless-stopped
+    working_dir: /var/www/html
+    command: php artisan reverb:start --host=0.0.0.0 --port=8080
+    ports:
+      - "8089:8080"
+    volumes:
+      - .:/var/www/html
+    networks:
+      - laravel
+    depends_on:
+      - db
+      - redis
+
   scheduler:
     build:
       context: .

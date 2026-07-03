@@ -33,7 +33,7 @@ class ListService
                 'id'         => $user->id,
                 'name'       => $user->name,
                 'email'      => $user->email,
-                'role'       => $user->role?->only(['name', 'display_name']),
+                'role'       => $user->role?->only(['id', 'name', 'display_name']),
                 'can_delete' => $canDelete && $actorRank > ($user->role?->rank() ?? 0),
                 'can_edit' => $canEdit && $actorRank > ($user->role?->rank() ?? 0),
             ]),
