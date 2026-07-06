@@ -13,6 +13,7 @@ services:
       - laravel
     depends_on:
       - db
+      - pgsql
       - redis
 
   nginx:
@@ -45,6 +46,21 @@ services:
     networks:
       - laravel
 
+  pgsql:
+    image: postgres:18-alpine
+    container_name: laravel_pgsql
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_DATABASE:-laravel}
+      POSTGRES_USER: ${DB_USERNAME:-laravel}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-secret}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgsql_data:/var/lib/postgresql
+    networks:
+      - laravel
+
   redis:
     image: redis:7.2-alpine
     container_name: laravel_redis
@@ -72,6 +88,7 @@ services:
       - laravel
     depends_on:
       - db
+      - pgsql
       - redis
 
   reverb:
@@ -90,6 +107,7 @@ services:
       - laravel
     depends_on:
       - db
+      - pgsql
       - redis
 
   scheduler:
@@ -106,6 +124,7 @@ services:
       - laravel
     depends_on:
       - db
+      - pgsql
       - redis
 
   adminer:
@@ -118,6 +137,7 @@ services:
       - laravel
     depends_on:
       - db
+      - pgsql
 
 networks:
   laravel:
@@ -125,4 +145,5 @@ networks:
 
 volumes:
   db_data:
+  pgsql_data:
   redis_data:

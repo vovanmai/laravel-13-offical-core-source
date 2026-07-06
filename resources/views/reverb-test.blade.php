@@ -142,7 +142,7 @@
                 else setStatus('disconnected');
             });
 
-            window.Echo.channel('test-channel').listen('.test.event', (payload) => {
+            window.Echo.private('test-channel').listen('.test.event', (payload) => {
                 addLogEntry({ direction: 'received', message: payload.message ?? JSON.stringify(payload) });
             });
         }
