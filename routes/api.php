@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BroadcastTestController;
 use App\Http\Controllers\Api\RoleController;
+use App\Http\Controllers\Api\UploadController;
 use App\Http\Controllers\Api\UserController;
 use App\Models\Permission;
 use Illuminate\Support\Facades\Route;
@@ -16,6 +17,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
 
     Route::get('roles', [RoleController::class, 'index']);
+
+    # upload
+    Route::post('uploads', [UploadController::class, 'store']);
 
     # user
     Route::get('users', [UserController::class, 'index'])->middleware('permission:' . Permission::USER_VIEW);
