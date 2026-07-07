@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
-#[Fillable(['target_type', 'target_id', 'disk', 'original_name', 'path', 'file_size', 'mime_type'])]
+#[Fillable(['uploadable_type', 'uploadable_id', 'disk', 'original_name', 'path', 'file_size', 'mime_type'])]
 class Upload extends Model
 {
     protected function casts(): array
@@ -16,7 +16,7 @@ class Upload extends Model
         ];
     }
 
-    public function target(): MorphTo
+    public function uploadable(): MorphTo
     {
         return $this->morphTo();
     }

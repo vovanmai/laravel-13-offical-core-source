@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('uploads', function (Blueprint $table) {
             $table->id();
-            $table->nullableMorphs('target');
+            $table->nullableMorphs('uploadable');
             $table->string('disk')->default('local');
             $table->string('original_name');
             $table->string('path');
