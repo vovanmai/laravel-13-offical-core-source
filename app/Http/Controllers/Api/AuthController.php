@@ -13,7 +13,7 @@ class AuthController extends Controller
 {
     public function login(LoginRequest $request): JsonResponse
     {
-        $user = User::with('role.permissions')
+        $user = User::with('roles.permissions')
             ->where('email', $request->email)
             ->first();
 
@@ -33,7 +33,7 @@ class AuthController extends Controller
                 'email'       => $user->email,
                 'role_name'        => $user->role?->name,
                 'role_display_name'        => $user->role?->display_name,
-                'permissions' => $user->role?->permissions->pluck('name'),
+                'permissions' => $user->getAllPermissions()->pluck('name'),
             ],
         ]);
     }
@@ -47,7 +47,7 @@ class AuthController extends Controller
 
     public function me(Request $request): JsonResponse
     {
-        $user = $request->user()->load('role.permissions');
+        $user = $request->user()->load('roles.permissions');
 
         return response()->json([
             'id'          => $user->id,
@@ -55,7 +55,7 @@ class AuthController extends Controller
             'email'       => $user->email,
             'role_name'        => $user->role?->name,
             'role_display_name'        => $user->role?->display_name,
-            'permissions' => $user->role?->permissions->pluck('name'),
+            'permissions' => $user->getAllPermissions()->pluck('name'),
         ]);
     }
 }

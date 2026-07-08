@@ -6,18 +6,19 @@ namespace App\Models;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 
-#[Fillable(['name', 'email', 'password', 'role_id'])]
+#[Fillable(['name', 'email', 'password'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, HasRoles, Notifiable;
 
     protected function casts(): array
     {
@@ -27,18 +28,8 @@ class User extends Authenticatable
         ];
     }
 
-    public function role(): BelongsTo
+    protected function role(): Attribute
     {
-        return $this->belongsTo(Role::class);
-    }
-
-    public function hasPermission(string $permission): bool
-    {
-        return $this->role?->hasPermission($permission) ?? false;
-    }
-
-    public function hasRole(string $role): bool
-    {
-        return $this->role?->name === $role;
+        return Attribute::make(get: fn() => $this->roles->first())->withoutObjectCaching();
     }
 }

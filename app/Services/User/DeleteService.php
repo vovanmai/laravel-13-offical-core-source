@@ -9,8 +9,8 @@ class DeleteService
 {
     public function execute(int $id): void
     {
-        $actor = User::with('role')->findOrFail(Auth::id());
-        $target = User::with('role')->findOrFail($id);
+        $actor = User::with('roles')->findOrFail(Auth::id());
+        $target = User::with('roles')->findOrFail($id);
 
         abort_if($actor->id === $target->id, 422, 'Không thể xóa chính mình.');
 

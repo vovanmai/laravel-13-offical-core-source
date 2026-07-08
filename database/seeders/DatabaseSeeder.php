@@ -18,19 +18,17 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(RolePermissionSeeder::class);
 
-        $roles = Role::pluck('id', 'name');
-
-        User::firstOrCreate(['email' => 'test@example.com'], [
-            'name'    => 'Test User',
-            'role_id' => $roles[Role::SUPER_ADMIN],
+        $user = User::firstOrCreate(['email' => 'test@example.com'], [
+            'name'     => 'Test User',
             'password' => bcrypt('password'),
         ]);
+        $user->syncRoles([Role::SUPER_ADMIN]);
 
-        $randomRoleIds = Role::whereIn('name', [Role::ADMIN, Role::SUB_ADMIN])->pluck('id');
+        $randomRoles = [Role::ADMIN, Role::SUB_ADMIN];
 
-        User::factory(100)->make()->each(function (User $user) use ($randomRoleIds) {
-            $user->role_id = $randomRoleIds->random();
+        User::factory(100)->make()->each(function (User $user) use ($randomRoles) {
             $user->save();
+            $user->syncRoles([$randomRoles[array_rand($randomRoles)]]);
         });
     }
 }

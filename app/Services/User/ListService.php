@@ -13,17 +13,17 @@ class ListService
         /** @var User|null $actor */
         $actor = Auth::user();
         $actorRank = $actor?->role?->rank() ?? 0;
-        $canDelete = $actor?->hasPermission(\App\Models\Permission::USER_DELETE) ?? false;
-        $canEdit = $actor?->hasPermission(\App\Models\Permission::USER_EDIT) ?? false;
+        $canDelete = $actor?->hasPermissionTo(\App\Models\Permission::USER_DELETE) ?? false;
+        $canEdit = $actor?->hasPermissionTo(\App\Models\Permission::USER_EDIT) ?? false;
 
-        $users = User::with('role')
-            ->whereHas('role', fn($q) => $q->where('name', '!=', Role::SUPER_ADMIN))
+        $users = User::with('roles')
+            ->whereHas('roles', fn($q) => $q->where('name', '!=', Role::SUPER_ADMIN))
             ->where('id', '!=', $actor?->id)
             ->when(isset($filters['email']), fn($q) =>
                 $q->where('email', 'like', "%{$filters['email']}%")
             )
             ->when(isset($filters['role_id']), fn($q) =>
-                $q->where('role_id', $filters['role_id'])
+                $q->whereHas('roles', fn($rq) => $rq->where('roles.id', $filters['role_id']))
             )
             ->latest()
             ->paginate($filters['per_page'] ?? 30);

@@ -9,8 +9,8 @@ class UpdateService
 {
     public function execute(int $id, array $data): array
     {
-        $actor = User::with('role')->findOrFail(Auth::id());
-        $target = User::with('role')->findOrFail($id);
+        $actor = User::with('roles')->findOrFail(Auth::id());
+        $target = User::with('roles')->findOrFail($id);
 
         abort_if(
             ($actor->role?->rank() ?? 0) < ($target->role?->rank() ?? 0),
@@ -22,10 +22,11 @@ class UpdateService
             'name'     => $data['name'] ?? null,
             'email'    => $data['email'] ?? null,
             'password' => $data['password'] ?? null,
-            'role_id'  => $data['role_id'] ?? null,
         ], fn($value) => !is_null($value)));
 
-        $target->load('role');
+        if (isset($data['role_id'])) {
+            $target->syncRoles([$data['role_id']]);
+        }
 
         return [
             'id'    => $target->id,

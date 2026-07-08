@@ -8,7 +8,7 @@ class ShowService
 {
     public function execute(int $id): array
     {
-        $user = User::with('role')->findOrFail($id);
+        $user = User::with('roles')->findOrFail($id);
 
         return [
             'id'    => $user->id,

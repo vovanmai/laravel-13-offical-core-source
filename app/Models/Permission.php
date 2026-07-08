@@ -2,10 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Spatie\Permission\Models\Permission as SpatiePermission;
 
-class Permission extends Model
+class Permission extends SpatiePermission
 {
     const USER_VIEW   = 'user.view';
     const USER_CREATE = 'user.create';
@@ -16,11 +15,4 @@ class Permission extends Model
     const ROLE_CREATE = 'role.create';
     const ROLE_EDIT   = 'role.edit';
     const ROLE_DELETE = 'role.delete';
-
-    protected $fillable = ['name', 'display_name', 'description'];
-
-    public function roles(): BelongsToMany
-    {
-        return $this->belongsToMany(Role::class, 'role_permission');
-    }
 }

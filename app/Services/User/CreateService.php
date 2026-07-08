@@ -12,10 +12,9 @@ class CreateService
             'name'     => $data['name'],
             'email'    => $data['email'],
             'password' => $data['password'],
-            'role_id'  => $data['role_id'],
         ]);
 
-        $user->load('role');
+        $user->syncRoles([$data['role_id']]);
 
         return [
             'id'    => $user->id,
