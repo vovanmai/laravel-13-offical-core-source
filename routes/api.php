@@ -19,6 +19,8 @@ Route::middleware('auth:user')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
 
     Route::get('roles', [RoleController::class, 'index']);
+    Route::post('roles', [RoleController::class, 'store'])->middleware('permission:' . Permission::ROLE_CREATE);
+    Route::put('roles/{id}', [RoleController::class, 'update'])->middleware('permission:' . Permission::ROLE_EDIT);
     Route::get('permissions', [PermissionController::class, 'index']);
 
     # notification
