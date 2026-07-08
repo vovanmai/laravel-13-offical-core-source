@@ -17,6 +17,7 @@ Route::post('broadcast-test', [BroadcastTestController::class, 'test']);
 Route::middleware('auth:user')->group(function () {
     Route::get('logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
+    Route::post('change-password', [AuthController::class, 'changePassword']);
 
     Route::get('roles', [RoleController::class, 'index']);
     Route::post('roles', [RoleController::class, 'store'])->middleware('permission:' . Permission::ROLE_CREATE);

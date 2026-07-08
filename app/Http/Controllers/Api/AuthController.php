@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\UserStatus;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\ChangePasswordRequest;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -23,6 +25,12 @@ class AuthController extends Controller
             ], 403);
         }
 
+        if ($user->status === UserStatus::SUSPENDED) {
+            return response()->json([
+                'message' => 'Tài khoản đã bị khóa. Vui lòng liên hệ Admin.',
+            ], 403);
+        }
+
         $token = $user->createToken('api-token')->plainTextToken;
 
         return response()->json([
@@ -33,6 +41,7 @@ class AuthController extends Controller
                 'email'       => $user->email,
                 'role_name'        => $user->role?->name,
                 'permissions' => $user->getAllPermissions()->pluck('name'),
+                'must_change_password' => is_null($user->password_changed_at),
             ],
         ]);
     }
@@ -54,6 +63,17 @@ class AuthController extends Controller
             'email'       => $user->email,
             'role_name'        => $user->role?->name,
             'permissions' => $user->getAllPermissions()->pluck('name'),
+            'must_change_password' => is_null($user->password_changed_at),
         ]);
+    }
+
+    public function changePassword(ChangePasswordRequest $request): JsonResponse
+    {
+        $request->user()->update([
+            'password'             => $request->password,
+            'password_changed_at'  => now(),
+        ]);
+
+        return response()->json(['message' => 'Đổi mật khẩu thành công.']);
     }
 }
