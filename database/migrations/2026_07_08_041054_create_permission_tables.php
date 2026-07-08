@@ -45,6 +45,7 @@ return new class extends Migration
             }
             $table->string('name');
             $table->string('description')->nullable();
+            $table->boolean('is_default')->default(false);
             $table->string('guard_name');
             $table->timestamps();
             if ($teams || config('permission.testing')) {

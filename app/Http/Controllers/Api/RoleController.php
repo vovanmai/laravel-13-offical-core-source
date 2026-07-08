@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Services\Role\ListService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {
@@ -13,8 +12,8 @@ class RoleController extends Controller
         private readonly ListService $listService,
     ) {}
 
-    public function index(Request $request): JsonResponse
+    public function index(): JsonResponse
     {
-        return response()->json($this->listService->execute($request->only('less_than')));
+        return response()->json($this->listService->execute());
     }
 }

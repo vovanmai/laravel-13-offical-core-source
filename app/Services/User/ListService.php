@@ -12,7 +12,6 @@ class ListService
     {
         /** @var User|null $actor */
         $actor = Auth::user();
-        $actorRank = $actor?->role?->rank() ?? 0;
         $canDelete = $actor?->hasPermissionTo(\App\Models\Permission::USER_DELETE) ?? false;
         $canEdit = $actor?->hasPermissionTo(\App\Models\Permission::USER_EDIT) ?? false;
 
@@ -34,8 +33,8 @@ class ListService
                 'name'       => $user->name,
                 'email'      => $user->email,
                 'role'       => $user->role?->only(['id', 'name']),
-                'can_delete' => $canDelete && $actorRank > ($user->role?->rank() ?? 0),
-                'can_edit' => $canEdit && $actorRank > ($user->role?->rank() ?? 0),
+                'can_delete' => $canDelete,
+                'can_edit'   => $canEdit,
             ]),
             'meta' => [
                 'current_page' => $users->currentPage(),

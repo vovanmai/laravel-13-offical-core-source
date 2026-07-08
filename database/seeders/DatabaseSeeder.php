@@ -24,11 +24,9 @@ class DatabaseSeeder extends Seeder
         ]);
         $user->syncRoles([Role::SUPER_ADMIN]);
 
-        $randomRoles = [Role::ADMIN, Role::SUB_ADMIN];
-
-        User::factory(100)->make()->each(function (User $user) use ($randomRoles) {
+        User::factory(100)->make()->each(function (User $user) {
             $user->save();
-            $user->syncRoles([$randomRoles[array_rand($randomRoles)]]);
+            $user->syncRoles([Role::ADMIN]);
         });
     }
 }
