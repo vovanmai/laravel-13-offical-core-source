@@ -26,7 +26,7 @@ class InvoicePaid extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['mail', 'database'];
     }
 
     /**
@@ -48,7 +48,8 @@ class InvoicePaid extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            //
+            'invoice_id' => 12,
+            'amount'     => 500000,
         ];
     }
 }
