@@ -32,7 +32,7 @@ class UpdateService
             'id'    => $target->id,
             'name'  => $target->name,
             'email' => $target->email,
-            'role'  => $target->role?->display_name,
+            'role'  => $target->role?->name,
         ];
     }
 }

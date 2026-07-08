@@ -11,14 +11,14 @@ class RolePermissionSeeder extends Seeder
     public function run(): void
     {
         $permissions = [
-            ['name' => Permission::USER_VIEW,   'display_name' => 'Xem người dùng'],
-            ['name' => Permission::USER_CREATE, 'display_name' => 'Tạo người dùng'],
-            ['name' => Permission::USER_EDIT,   'display_name' => 'Sửa người dùng'],
-            ['name' => Permission::USER_DELETE, 'display_name' => 'Xóa người dùng'],
-            ['name' => Permission::ROLE_VIEW,   'display_name' => 'Xem vai trò'],
-            ['name' => Permission::ROLE_CREATE, 'display_name' => 'Tạo vai trò'],
-            ['name' => Permission::ROLE_EDIT,   'display_name' => 'Sửa vai trò'],
-            ['name' => Permission::ROLE_DELETE, 'display_name' => 'Xóa vai trò'],
+            ['name' => Permission::USER_VIEW,   'group' => 'Người dùng', 'display_name' => 'Xem người dùng'],
+            ['name' => Permission::USER_CREATE, 'group' => 'Người dùng', 'display_name' => 'Tạo người dùng'],
+            ['name' => Permission::USER_EDIT,   'group' => 'Người dùng', 'display_name' => 'Sửa người dùng'],
+            ['name' => Permission::USER_DELETE, 'group' => 'Người dùng', 'display_name' => 'Xóa người dùng'],
+            ['name' => Permission::ROLE_VIEW,   'group' => 'Vai trò', 'display_name' => 'Xem vai trò'],
+            ['name' => Permission::ROLE_CREATE, 'group' => 'Vai trò', 'display_name' => 'Tạo vai trò'],
+            ['name' => Permission::ROLE_EDIT,   'group' => 'Vai trò', 'display_name' => 'Sửa vai trò'],
+            ['name' => Permission::ROLE_DELETE, 'group' => 'Vai trò', 'display_name' => 'Xóa vai trò'],
         ];
 
         foreach ($permissions as $perm) {
@@ -26,20 +26,17 @@ class RolePermissionSeeder extends Seeder
         }
 
         $superAdmin = Role::firstOrCreate(['name' => Role::SUPER_ADMIN], [
-            'display_name' => 'Super Admin',
-            'description'  => 'Toàn quyền hệ thống',
+            'description' => 'Toàn quyền hệ thống',
         ]);
         $superAdmin->permissions()->sync(Permission::pluck('id'));
 
         $admin = Role::firstOrCreate(['name' => Role::ADMIN], [
-            'display_name' => 'Admin',
-            'description'  => 'Quản trị người dùng và vai trò',
+            'description' => 'Quản trị người dùng và vai trò',
         ]);
         $admin->permissions()->sync(Permission::pluck('id'));
 
         $subAdmin = Role::firstOrCreate(['name' => Role::SUB_ADMIN], [
-            'display_name' => 'Sub Admin',
-            'description'  => 'Quyền hạn chế',
+            'description' => 'Quyền hạn chế',
         ]);
         $subAdmin->permissions()->sync(
             Permission::whereIn('name', [Permission::USER_VIEW, Permission::USER_CREATE, Permission::ROLE_VIEW])->pluck('id')

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BroadcastTestController;
 use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\Api\PermissionController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\UploadController;
 use App\Http\Controllers\Api\UserController;
@@ -13,11 +14,12 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::post('broadcast-test', [BroadcastTestController::class, 'test']);
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('auth:user')->group(function () {
     Route::get('logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
 
     Route::get('roles', [RoleController::class, 'index']);
+    Route::get('permissions', [PermissionController::class, 'index']);
 
     # notification
     Route::get('notifications', [NotificationController::class, 'index']);

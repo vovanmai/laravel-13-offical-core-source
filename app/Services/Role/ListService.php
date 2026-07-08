@@ -21,9 +21,8 @@ class ListService
             })
             ->get()
             ->map(fn(Role $role) => [
-                'id'           => $role->id,
-                'name'         => $role->name,
-                'display_name' => $role->display_name,
+                'id'   => $role->id,
+                'name' => $role->name,
             ])
             ->toArray();
     }
