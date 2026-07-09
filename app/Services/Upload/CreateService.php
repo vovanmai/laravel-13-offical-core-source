@@ -18,7 +18,8 @@ class CreateService
         $fileName = Str::uuid()->toString() . '.' . $file->getClientOriginalExtension();
 
         $path = match ($disk) {
-            's3'    => $file->storeAs('uploads', $fileName, 's3'),
+            // 's3'    => $file->storeAs('uploads', $fileName, 's3'),
+            's3'    => $file->storeAs('uploads', $fileName, 's3', ['visibility' => 'public']),
             'public' => $file->storeAs('uploads', $fileName, 'public'),
             default => $file->storeAs('uploads', $fileName, 'local'),
         };
@@ -36,7 +37,8 @@ class CreateService
             'original_name' => $upload->original_name,
             'path'          => $upload->path,
             'url'           => match ($disk) {
-                's3'     => Storage::disk('s3')->temporaryUrl($upload->path, now()->addMinutes(5)),
+                // 's3'     => Storage::disk('s3')->temporaryUrl($upload->path, now()->addMinutes(5)),
+                's3'     => Storage::disk('s3')->url($upload->path),
                 'public' => Storage::disk('public')->url($upload->path),
                 default  => null,
             },

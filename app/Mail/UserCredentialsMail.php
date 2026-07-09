@@ -33,6 +33,7 @@ class UserCredentialsMail extends Mailable
                 'name'     => $this->user->name,
                 'email'    => $this->user->email,
                 'password' => $this->password,
+                'loginUrl' => rtrim(config('app.frontend_url'), '/') . '/login',
             ],
         );
     }

@@ -14,7 +14,7 @@ class StoreUploadRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'file' => ['required', 'file'],
+            'file' => ['required', 'file', 'max:51200'],
         ];
     }
 }

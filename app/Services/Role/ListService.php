@@ -14,6 +14,7 @@ class ListService
             ->map(fn(Role $role) => [
                 'id'   => $role->id,
                 'name' => $role->name,
+                'is_default' => $role->is_default,
             ])
             ->toArray();
     }
