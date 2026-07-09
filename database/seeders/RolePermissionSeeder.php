@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\RoleName;
 use App\Models\Permission;
 use App\Models\Role;
 use Illuminate\Database\Seeder;
@@ -25,13 +26,13 @@ class RolePermissionSeeder extends Seeder
             Permission::firstOrCreate(['name' => $perm['name']], $perm);
         }
 
-        $superAdmin = Role::firstOrCreate(['name' => Role::SUPER_ADMIN], [
+        $superAdmin = Role::firstOrCreate(['name' => RoleName::SUPER_ADMIN->value], [
             'description' => 'Toàn quyền hệ thống',
             'is_default'  => true,
         ]);
         $superAdmin->permissions()->sync(Permission::pluck('id'));
 
-        $admin = Role::firstOrCreate(['name' => Role::ADMIN], [
+        $admin = Role::firstOrCreate(['name' => RoleName::ADMIN->value], [
             'description' => 'Quản trị người dùng và vai trò',
             'is_default'  => true,
         ]);

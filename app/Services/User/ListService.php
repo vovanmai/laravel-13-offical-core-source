@@ -2,7 +2,7 @@
 
 namespace App\Services\User;
 
-use App\Models\Role;
+use App\Enums\RoleName;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,7 +14,7 @@ class ListService
         $actor = Auth::user();
 
         $users = User::with('roles')
-            ->whereHas('roles', fn($q) => $q->where('name', '!=', Role::SUPER_ADMIN))
+            ->whereHas('roles', fn($q) => $q->where('name', '!=', RoleName::SUPER_ADMIN->value))
             ->where('id', '!=', $actor?->id)
             ->when(isset($filters['email']), fn($q) =>
                 $q->where('email', 'like', "%{$filters['email']}%")

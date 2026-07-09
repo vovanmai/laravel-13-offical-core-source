@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Role;
+use App\Enums\RoleName;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -22,11 +22,11 @@ class DatabaseSeeder extends Seeder
             'name'     => 'Test User',
             'password' => bcrypt('password'),
         ]);
-        $user->syncRoles([Role::SUPER_ADMIN]);
+        $user->syncRoles([RoleName::SUPER_ADMIN->value]);
 
         User::factory(100)->make()->each(function (User $user) {
             $user->save();
-            $user->syncRoles([Role::ADMIN]);
+            $user->syncRoles([RoleName::ADMIN->value]);
         });
     }
 }
