@@ -31,6 +31,10 @@ class AuthController extends Controller
             ], 403);
         }
 
+        if (is_null($user->first_login_at)) {
+            $user->update(['first_login_at' => now()]);
+        }
+
         $token = $user->createToken('api-token')->plainTextToken;
 
         return response()->json([
@@ -39,9 +43,9 @@ class AuthController extends Controller
                 'id'          => $user->id,
                 'name'        => $user->name,
                 'email'       => $user->email,
-                'role_name'        => $user->role?->name,
+                'role_name'   => $user->role?->name,
                 'permissions' => $user->getAllPermissions()->pluck('name'),
-                'must_change_password' => is_null($user->password_changed_at),
+                'password_changed_at' => $user->password_changed_at,
             ],
         ]);
     }
@@ -63,13 +67,21 @@ class AuthController extends Controller
             'email'       => $user->email,
             'role_name'        => $user->role?->name,
             'permissions' => $user->getAllPermissions()->pluck('name'),
-            'must_change_password' => is_null($user->password_changed_at),
+            'password_changed_at' => $user->password_changed_at,
         ]);
     }
 
     public function changePassword(ChangePasswordRequest $request): JsonResponse
     {
-        $request->user()->update([
+        $user = $request->user();
+
+        if (!is_null($user->password_changed_at)) {
+            return response()->json([
+                'message' => 'Bạn đã thay đổi mật khẩu lần đầu rồi.',
+            ], 400);
+        }
+
+        $user->update([
             'password'             => $request->password,
             'password_changed_at'  => now(),
         ]);

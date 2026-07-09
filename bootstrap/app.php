@@ -25,6 +25,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->redirectGuestsTo(fn () => null);
         $middleware->alias([
             'auth'                => \App\Http\Middleware\Authenticate::class,
+            'password.changed'    => \App\Http\Middleware\EnsurePasswordChanged::class,
             'role'                => \Spatie\Permission\Middleware\RoleMiddleware::class,
             'permission'          => \Spatie\Permission\Middleware\PermissionMiddleware::class,
             'role_or_permission'  => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,

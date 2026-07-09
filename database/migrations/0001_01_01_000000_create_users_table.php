@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedTinyInteger('status')->default(UserStatus::ACTIVE->value);
             $table->timestamp('email_verified_at')->nullable();
             $table->timestamp('password_changed_at')->nullable();
+            $table->timestamp('first_login_at')->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
