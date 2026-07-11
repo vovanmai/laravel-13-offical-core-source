@@ -7,20 +7,28 @@ use App\Http\Requests\Role\StoreRoleRequest;
 use App\Http\Requests\Role\UpdateRoleRequest;
 use App\Services\Role\CreateService;
 use App\Services\Role\ListService;
+use App\Services\Role\ShowService;
 use App\Services\Role\UpdateService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {
     public function __construct(
         private readonly ListService   $listService,
+        private readonly ShowService   $showService,
         private readonly CreateService $createService,
         private readonly UpdateService $updateService,
     ) {}
 
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        return response()->json($this->listService->execute());
+        return response()->json($this->listService->execute($request->only('name', 'is_default')));
+    }
+
+    public function show(int $id): JsonResponse
+    {
+        return response()->json($this->showService->execute($id));
     }
 
     public function store(StoreRoleRequest $request): JsonResponse

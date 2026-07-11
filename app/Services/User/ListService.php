@@ -30,7 +30,7 @@ class ListService
                 'id'         => $user->id,
                 'name'       => $user->name,
                 'email'      => $user->email,
-                'role'       => $user->role?->only(['id', 'name']),
+                'role'       => $user->role?->only(['id', 'name', 'is_default']),
             ]),
             'meta' => [
                 'current_page' => $users->currentPage(),

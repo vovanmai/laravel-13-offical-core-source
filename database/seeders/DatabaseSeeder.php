@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Enums\RoleName;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -18,15 +19,20 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(RolePermissionSeeder::class);
 
-        $user = User::firstOrCreate(['email' => 'test@example.com'], [
-            'name'     => 'Test User',
-            'password' => bcrypt('password'),
+        $superAdminRoleId = Role::where('name', RoleName::SUPER_ADMIN->value)->value('id');
+        $user = User::firstOrCreate(['email' => 'superadmin@example.com'], [
+            'name'     => 'Super Admin',
+            'password' => bcrypt('11111111'),
+            'password_changed_at' => now(),
         ]);
-        $user->syncRoles([RoleName::SUPER_ADMIN->value]);
+        $user->syncRoles([$superAdminRoleId]);
 
-        User::factory(100)->make()->each(function (User $user) {
-            $user->save();
-            $user->syncRoles([RoleName::ADMIN->value]);
-        });
+        $adminRoleId = Role::where('name', RoleName::ADMIN->value)->value('id');
+        $admin = User::firstOrCreate(['email' => 'admin@example.com'], [
+            'name'     => 'Admin',
+            'password' => bcrypt('11111111'),
+            'password_changed_at' => now(),
+        ]);
+        $admin->syncRoles([$adminRoleId]);
     }
 }
