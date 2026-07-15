@@ -2,7 +2,8 @@
 
 namespace App\Services\Upload;
 
-use App\Models\Upload;
+use App\Enums\FileSource;
+use App\Models\File;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -24,12 +25,13 @@ class CreateService
             default => $file->storeAs('uploads', $fileName, 'local'),
         };
 
-        $upload = Upload::create([
+        $upload = File::create([
             'disk'          => $disk,
             'original_name' => $file->getClientOriginalName(),
             'path'          => $path,
             'file_size'     => $file->getSize(),
             'mime_type'     => $file->getMimeType(),
+            'source'        => FileSource::SOURCE_UPLOAD,
         ]);
 
         return [
